@@ -43,6 +43,6 @@ public class Commands {
 
     public static final String startservice = commandInitChar+"noticias";
 
-    public static final String stopservice = commandInitChar+"stopnoticias";
+    public static final String stopservice = commandInitChar+"noticiasoff";
 
 }

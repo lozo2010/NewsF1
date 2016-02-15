@@ -147,12 +147,33 @@ public class Noticias {
             b.setChatId(id);
             b.setText("Gracias por suscribirse a las Noticias de NewsF1Bot. \n" +
                     "A partir de ahora le llegaran Mensajes con los ultimos tweets sobre la F1.\n" +
-                    "Para no recibir mas noticias usa el comando /stopnoticias.");
+                    "Para no recibir mas noticias usa el comando /noticiasoff.");
             try {
                 a.sendMessage(b);
             } catch (TelegramApiException e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    public static void deleteID(String id) throws SQLException {
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        Connection conexion = DriverManager.getConnection("jdbc:mysql://62.43.193.254:3306/id_mensajes", "DbF1", "f1");
+        Statement st = conexion.createStatement();
+        st.executeUpdate("DELETE FROM id_mensajes.id where ID='"+id+"';");
+        EchoHandlers a = new EchoHandlers();
+        SendMessage b = new SendMessage();
+        b.setChatId(id);
+        b.setText("Se ha dado de baja del servicio correctamente..\n" +
+                "Para recibir mas noticias usa el comando /noticias.");
+        try {
+            a.sendMessage(b);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
         }
     }
 
