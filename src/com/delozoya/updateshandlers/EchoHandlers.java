@@ -339,8 +339,10 @@ public class EchoHandlers extends TelegramLongPollingBot {
 
     public static void sendMenssage1(String m){
         //this.sendMessage(send);
+        try {
+            for (int i =0;i< Noticias.getIds().size();i++){
                 SendMessage send = new SendMessage();
-                send.setChatId("3037122");
+                send.setChatId(Noticias.ids.get(i));
                 send.setText(m);
                 try {
                     EchoHandlers a=new EchoHandlers();
@@ -349,6 +351,11 @@ public class EchoHandlers extends TelegramLongPollingBot {
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
+
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
 
 
