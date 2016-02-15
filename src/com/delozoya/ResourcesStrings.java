@@ -5,14 +5,14 @@ package com.delozoya;
  */
 public class ResourcesStrings {
 
-    public static final String start ="Hola. Soy un Bot de F1 y utilidades de los GP de Formula1. Puedes usar los siguientes Comandos: \n"
+    public static final String start ="Hola. Soy un Bot de F1 y utilidades de los GP de Formula1. Puedes usar los siguientes Comandos: \n" +
+            "/noticias\n" +
+            "/noticiasoff\n"
             +"/circuitos\n" +
             "/calendario\n" +
             "/nextgp\n" +
             "/infogp\n" +
             "/clasificacion\n" +
-            "/pretemporada\n" +
-            "/abandonos\n" +
             "/pilotos\n" +
             "/escuderias\n" +
             "/help";

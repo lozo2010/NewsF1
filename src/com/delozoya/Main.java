@@ -56,8 +56,7 @@ public class Main {
                 }
                 System.out.println("@" + status.getUser().getScreenName() + " - " + status.getText());
                 if(status.getUser().getScreenName().equals("NF1bot")||status.getUser().getScreenName().equals("a3formula1")||status.getUser().getScreenName().equals("cardriverthef1")||
-                        status.getUser().getScreenName().equals("RaulMolinaRecio")||status.getUser().getScreenName().equals("F1")||status.getUser().getScreenName().equals("F1_LAT")||
-                        status.getUser().getScreenName().equals("LaF1es")) {
+                        status.getUser().getScreenName().equals("F1")||status.getUser().getScreenName().equals("F1_LAT")) {
                     EchoHandlers.sendMenssage1("@" + status.getUser().getScreenName() + " - " + status.getText());
 
 

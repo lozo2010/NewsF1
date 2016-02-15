@@ -148,13 +148,14 @@ public class EchoHandlers extends TelegramLongPollingBot {
         Message message = update.getMessage();
         int userId = message.getFrom().getId();
 
+
         if (message.getText().startsWith(Commands.startCommand)) {
             System.out.println(message.getText());
             onStartdirectionsCommand(message);
         }else if (message.getText().startsWith(Commands.circuitosCommand)) {
             System.out.println(message.getText());
             createKeyCircuitos(message);
-        }else if (message.getText().startsWith(Commands.calendarioCommand)) {
+        }else if (message.getText().startsWith(Commands.calendarioCommand)||message.getText().startsWith(Emoji.CALENDAR.toString())) {
             SendPhoto calendario= new SendPhoto();
             calendario.setPhoto(ResourcesStrings.id_calendario);
             calendario.setChatId(message.getChatId() + "");
@@ -164,7 +165,7 @@ public class EchoHandlers extends TelegramLongPollingBot {
                 e.printStackTrace();
             }
 
-        }else if (message.getText().startsWith(Commands.nextGpCommand)) {
+        }else if (message.getText().startsWith(Commands.nextGpCommand)||message.getText().startsWith(Emoji.NEXTGP.toString())) {
             System.out.println(message.getText());
             SendMessage sendMessageRequest = new SendMessage();
             sendMessageRequest.setChatId(message.getChatId().toString());
@@ -175,7 +176,7 @@ public class EchoHandlers extends TelegramLongPollingBot {
             } catch (TelegramApiException e) {
                 BotLogger.error(LOGTAG, e);
             }
-        }else if (message.getText().startsWith(Commands.infoActualGPCommand)) {
+        }else if (message.getText().startsWith(Commands.infoActualGPCommand)||message.getText().startsWith(Emoji.ACTUAL.toString())) {
             System.out.println(message.getText());
             SendMessage sendMessageRequest = new SendMessage();
             sendMessageRequest.setChatId(message.getChatId().toString());
@@ -204,30 +205,31 @@ public class EchoHandlers extends TelegramLongPollingBot {
 
         }else if (message.getText().startsWith(Commands.abandonosCommand)) {
 
-        }else if (message.getText().startsWith(Commands.pilotosCommand)) {
+        }else if (message.getText().startsWith(Commands.pilotosCommand)||message.getText().startsWith(Emoji.PILOTO.toString())) {
             System.out.println(message.getText());
             createKeyPilotos(message);
-        }else if(message.getText().equals(Commands.startservice)) {
+        }else if(message.getText().equals(Commands.startservice)||message.getText().startsWith(Emoji.NEWSPAPER.toString())) {
             System.out.println(message.getText());
             try {
                 Noticias.addID(String.valueOf(message.getFrom().getId()));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }else if (message.getText().equals(Commands.stopservice)){
+        }else if (message.getText().equals(Commands.stopservice)||message.getText().startsWith(Emoji.STOPNOT.toString())){
             System.out.println(message.getText());
             try {
                 Noticias.deleteID(String.valueOf(message.getFrom().getId()));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }else if (message.getText().startsWith(Commands.escuderiasCommand)) {
+        }else if (message.getText().startsWith(Commands.escuderiasCommand)||message.getText().startsWith(Emoji.ESCUDERIA.toString())) {
             System.out.println(message.getText());
             createKeyEscuderia(message);
         }else if (message.getText().equals("Circuito")){
             circuitoRecibido(message);
         }else if (message.getText().equals("Cancelar")){
-            sendHideKeyboard(0,message.getChatId(),message.getMessageId());
+            Inicio(message);
+            //sendHideKeyboard(0,message.getChatId(),message.getMessageId());
         }else if (message.getText().substring(0,6).equals("Dorsal")){
             System.out.println(message.getText().substring(0,message.getText().indexOf(" -")));
             setPiloto(message);
@@ -267,11 +269,62 @@ public class EchoHandlers extends TelegramLongPollingBot {
 
     }
 
+    public ReplyKeyboardMarkup keyStart(Message message){
+        ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
+
+        List<List<String>> keyboard = new ArrayList<>();
+        List<String> keyboardFirstRow = new ArrayList<>();
+        keyboardFirstRow.add(Emoji.NEWSPAPER+" "+"Suscribirse Noticias");
+        keyboardFirstRow.add(Emoji.STOPNOT+" Baja de Noticias");
+        List<String> keyboard2Row = new ArrayList<>();
+        keyboard2Row.add(" Circuitos");
+        keyboard2Row.add(Emoji.CALENDAR+" Calendario");
+        List<String> keyboard3Row = new ArrayList<>();
+        keyboard3Row.add(Emoji.NEXTGP+" Siguente GP");
+        keyboard3Row.add(Emoji.ACTUAL+" GP Actual");
+        List<String> keyboard4Row = new ArrayList<>();
+        keyboard4Row.add("Clasificacion");
+        keyboard4Row.add(Emoji.PILOTO+" Pilotos");
+        keyboard4Row.add(Emoji.ESCUDERIA+" Escuderia");
+        keyboard.add(keyboardFirstRow);
+        keyboard.add(keyboard2Row);
+        keyboard.add(keyboard3Row);
+        keyboard.add(keyboard4Row);
+
+        replyKeyboardMarkup.setResizeKeyboard(true);
+        replyKeyboardMarkup.setOneTimeKeyboad(false);
+        replyKeyboardMarkup.setKeyboard(keyboard);
+        replyKeyboardMarkup.setSelective(true);
+        return replyKeyboardMarkup;
+    }
+
+    private void Inicio(Message message){
+        try {
+            SendMessage sendMessageRequest = new SendMessage();
+            sendMessageRequest.setReplayToMessageId(message.getMessageId());
+            sendMessageRequest.setChatId(message.getChatId().toString());
+            sendMessageRequest.enableMarkdown(true);
+
+
+
+            sendMessageRequest.setReplayMarkup(keyStart(message));
+            sendMessageRequest.setText("¿Que información necesita?");
+            sendMessage(sendMessageRequest);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
+    }
 
     private void onStartdirectionsCommand(Message message) {
         try {
             SendMessage sendMessageRequest = new SendMessage();
-            sendMessageRequest.setChatId(message.getChatId() + "");
+            sendMessageRequest.setReplayToMessageId(message.getMessageId());
+            sendMessageRequest.setChatId(message.getChatId().toString());
+            sendMessageRequest.enableMarkdown(true);
+
+
+
+            sendMessageRequest.setReplayMarkup(keyStart(message));
             sendMessageRequest.setText(ResourcesStrings.start);
             sendMessage(sendMessageRequest);
         } catch (TelegramApiException e) {
@@ -305,9 +358,6 @@ public class EchoHandlers extends TelegramLongPollingBot {
             BotLogger.error(LOGTAG, e);
         }
     }
-
-
-
 
     private void PilotoRecibido(Message message)throws InvalidObjectException {
         SendMessage sendMessageRequest = new SendMessage();
