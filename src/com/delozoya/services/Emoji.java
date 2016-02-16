@@ -169,6 +169,9 @@ public enum Emoji {
     NEXTGP(null,'\u23ED'),
     PILOTO('\uD83D','\uDC6E'),
     ESCUDERIA('\uD83C','\uDFCE'),
+    CIRCUITO('\uD83C','\uDFC1'),
+    CLASI('\uD83C','\uDFC6'),
+    HELP(null,'\u2753'),
     NEWSPAPER('\uD83D','\uDCF0');
 
     Character firstChar;

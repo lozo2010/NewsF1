@@ -90,7 +90,7 @@ public class Pilotos {
                 "Fecha de Nacimiento: "+piloto[3]+"\n"+
                 "Mejor Posicion Mundial: "+piloto[4]+"\n"+
                 "Numero de Poles: "+piloto[5]+"\n"+
-                "Numero de Vuletas Rapidas: "+piloto[6]+"\n"+
+                "Numero de Vueltas Rapidas: "+piloto[6]+"\n"+
                 "Numero de Victorias: "+piloto[7]+"\n"+
                 "Numero de Podiums: "+piloto[8]+"\n"+
                 "Numero de Puntos Total: "+piloto[9]+"\n"+
@@ -133,7 +133,7 @@ public class Pilotos {
         pilotos.add("Dorsal: 12 - Felipe Nasr");
         pilotos.add("Dorsal: 14 - Fernando Alonso");
         pilotos.add("Dorsal: 22 - Jenson Button");
-        pilotos.add("Dorsal: - - -");
+        pilotos.add("Dorsal: 94 - Pascal Wehrlein");
         pilotos.add("Dorsal: - - -");
         pilotos.add("Dorsal: 8 - Romain Grosjean");
         pilotos.add("Dorsal: 21 - Esteban Gutiérrez");

@@ -152,7 +152,7 @@ public class EchoHandlers extends TelegramLongPollingBot {
         if (message.getText().startsWith(Commands.startCommand)) {
             System.out.println(message.getText());
             onStartdirectionsCommand(message);
-        }else if (message.getText().startsWith(Commands.circuitosCommand)) {
+        }else if (message.getText().startsWith(Commands.circuitosCommand)||message.getText().startsWith(Emoji.CIRCUITO.toString())) {
             System.out.println(message.getText());
             createKeyCircuitos(message);
         }else if (message.getText().startsWith(Commands.calendarioCommand)||message.getText().startsWith(Emoji.CALENDAR.toString())) {
@@ -181,7 +181,7 @@ public class EchoHandlers extends TelegramLongPollingBot {
             SendMessage sendMessageRequest = new SendMessage();
             sendMessageRequest.setChatId(message.getChatId().toString());
             SendPhoto horario = new SendPhoto();
-            horario.setNewPhoto("C:\\Australia.png","Australia.png");
+            horario.setNewPhoto("/home/server/Escritorio/BotF1/Australia.png","Australia.png");
             horario.setChatId(message.getChatId() + "");
             sendMessageRequest.setText(InfoGP.getInfo());
             try {
@@ -191,7 +191,7 @@ public class EchoHandlers extends TelegramLongPollingBot {
                 BotLogger.error(LOGTAG, e);
             }
 
-        }else if (message.getText().startsWith(Commands.clasificacionCommand)) {
+        }else if (message.getText().startsWith(Commands.clasificacionCommand)||message.getText().startsWith(Emoji.CLASI.toString())) {
             System.out.println(message.getText());
             SendMessage sendMessageRequest = new SendMessage();
             sendMessageRequest.setChatId(message.getChatId().toString());
@@ -208,14 +208,35 @@ public class EchoHandlers extends TelegramLongPollingBot {
         }else if (message.getText().startsWith(Commands.pilotosCommand)||message.getText().startsWith(Emoji.PILOTO.toString())) {
             System.out.println(message.getText());
             createKeyPilotos(message);
-        }else if(message.getText().equals(Commands.startservice)||message.getText().startsWith(Emoji.NEWSPAPER.toString())) {
+        }else if(message.getText().startsWith(Commands.startservice)||message.getText().startsWith(Emoji.NEWSPAPER.toString())) {
             System.out.println(message.getText());
             try {
                 Noticias.addID(String.valueOf(message.getFrom().getId()));
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        }else if (message.getText().equals(Commands.stopservice)||message.getText().startsWith(Emoji.STOPNOT.toString())){
+        }else if (message.getText().startsWith(Commands.help)||message.getText().startsWith(Emoji.HELP.toString())){
+            System.out.println(message.getText());
+            SendMessage sendMessageRequest = new SendMessage();
+            sendMessageRequest.setChatId(message.getChatId().toString());
+            sendMessageRequest.setText("/start - Start Bot\n" +
+                    "/noticias - Suscribirse a noticias y avisos de la F1\n" +
+                    "/offnoticias - Darse de baja del servicio de noticias\n" +
+                    "/circuitos - Informacion sobre los circuitos de esta temporada\n" +
+                    "/calendario - Calendario Formula1 2016\n" +
+                    "/nextgp - Siguiente Gran Premio\n" +
+                    "/infogp - Informacion sobre el Gran Premio Actual\n" +
+                    "/clasificacion - Clasificacion de la temporada Actual\n" +
+                    "/pilotos - Informacion sobre los pilotos\n" +
+                    "/escuderias - Informacion sobre los Equipos\n" +
+                    "/help - Ayuda");
+            try {
+                sendMessage(sendMessageRequest);
+            } catch (TelegramApiException e) {
+                e.printStackTrace();
+            }
+
+        }else if (message.getText().startsWith(Commands.stopservice)||message.getText().startsWith(Emoji.STOPNOT.toString())){
             System.out.println(message.getText());
             try {
                 Noticias.deleteID(String.valueOf(message.getFrom().getId()));
@@ -277,19 +298,22 @@ public class EchoHandlers extends TelegramLongPollingBot {
         keyboardFirstRow.add(Emoji.NEWSPAPER+" "+"Suscribirse Noticias");
         keyboardFirstRow.add(Emoji.STOPNOT+" Baja de Noticias");
         List<String> keyboard2Row = new ArrayList<>();
-        keyboard2Row.add(" Circuitos");
+        keyboard2Row.add(Emoji.CIRCUITO+" Circuitos");
         keyboard2Row.add(Emoji.CALENDAR+" Calendario");
         List<String> keyboard3Row = new ArrayList<>();
         keyboard3Row.add(Emoji.NEXTGP+" Siguente GP");
         keyboard3Row.add(Emoji.ACTUAL+" GP Actual");
         List<String> keyboard4Row = new ArrayList<>();
-        keyboard4Row.add("Clasificacion");
+        keyboard4Row.add(Emoji.CLASI+" Clasificacion");
         keyboard4Row.add(Emoji.PILOTO+" Pilotos");
-        keyboard4Row.add(Emoji.ESCUDERIA+" Escuderia");
+        List<String> keyboard5Row = new ArrayList<>();
+        keyboard5Row.add(Emoji.ESCUDERIA+" Escuderia");
+        keyboard5Row.add(Emoji.HELP+" Help");
         keyboard.add(keyboardFirstRow);
         keyboard.add(keyboard2Row);
         keyboard.add(keyboard3Row);
         keyboard.add(keyboard4Row);
+        keyboard.add(keyboard5Row);
 
         replyKeyboardMarkup.setResizeKeyboard(true);
         replyKeyboardMarkup.setOneTimeKeyboad(false);
@@ -395,11 +419,14 @@ public class EchoHandlers extends TelegramLongPollingBot {
                 send.setChatId(Noticias.ids.get(i));
                 send.setText(m);
                 try {
+
                     EchoHandlers a=new EchoHandlers();
 
                     a.sendMessage(send);
                 } catch (TelegramApiException e) {
+                    System.out.println(Noticias.ids.get(i)+"\n"+e.getCause().toString());
                     e.printStackTrace();
+
                 }
 
             }
@@ -896,6 +923,15 @@ public class EchoHandlers extends TelegramLongPollingBot {
                     BotLogger.error(LOGTAG, e);
                 }
                 break;
+            case "Dorsal: 94":
+                try {
+                    sendMessage(Pilotos.getmessagePilotos("94",message));
+                    image.setPhoto("AgADBAADxrIxG8JXLgABbJosIvVk3wwI_xwZAAQ-x60cyDs0XuxyAAIC");
+                    sendPhoto(image);
+                } catch (TelegramApiException e) {
+                    BotLogger.error(LOGTAG, e);
+                }
+                break;
             case "Dorsal: 8":
                 try {
                     sendMessage(Pilotos.getmessagePilotos("8",message));
@@ -921,10 +957,13 @@ public class EchoHandlers extends TelegramLongPollingBot {
 
     public void setEscuderia(Message message){
         String nameescuderia=message.getText().substring(message.getText().indexOf("- "));
+        SendPhoto image = new SendPhoto();
+        image.setChatId(message.getChatId() + "");
 
         switch (nameescuderia) {
             case "- Mercedes":
                 try {
+                    image.setPhoto("AgADBAADyrIxG8JXLgABCBkVkdjyFsz48SUZAASPGCuePzelNu5iAAIC");
                     sendMessage(Escuderias.getmessageEscuderia("1", message));
                     sendPhoto(Escuderias.getphoto("1", message));
                 } catch (TelegramApiException e) {
@@ -933,6 +972,7 @@ public class EchoHandlers extends TelegramLongPollingBot {
                 break;
             case "- Ferrari":
                 try {
+                    image.setPhoto("AgADBAADy7IxG8JXLgABLDikOgudA2LWDR0ZAAS4_m3dlkOl2CXFAQABAg");
                     sendMessage(Escuderias.getmessageEscuderia("2", message));
                     sendPhoto(Escuderias.getphoto("2", message));
                 } catch (TelegramApiException e) {
@@ -941,6 +981,7 @@ public class EchoHandlers extends TelegramLongPollingBot {
                 break;
             case "- Williams":
                 try {
+                    image.setPhoto("AgADBAADzLIxG8JXLgABGm1LqippGiZbtRwZAARiH1_DNo4_SODIAQABAg");
                     sendMessage(Escuderias.getmessageEscuderia("1", message));
                     sendPhoto(Escuderias.getphoto("3", message));
                 } catch (TelegramApiException e) {
@@ -949,6 +990,7 @@ public class EchoHandlers extends TelegramLongPollingBot {
                 break;
             case "- Red Bull":
                 try {
+                    image.setPhoto("AgADBAADzbIxG8JXLgABOQYjsdRDiLeO8CUZAAS8bbow4CWR8hhkAAIC");
                     sendMessage(Escuderias.getmessageEscuderia("4", message));
                     sendPhoto(Escuderias.getphoto("4", message));
                 } catch (TelegramApiException e) {
@@ -957,6 +999,7 @@ public class EchoHandlers extends TelegramLongPollingBot {
                 break;
             case "- Force India":
                 try {
+                    image.setPhoto("AgADBAADzrIxG8JXLgABTtFQpLDyhtI7CxsZAARMlHJKWE6nnhZ0AAIC");
                     sendMessage(Escuderias.getmessageEscuderia("5", message));
                     sendPhoto(Escuderias.getphoto("5", message));
                 } catch (TelegramApiException e) {
@@ -965,6 +1008,7 @@ public class EchoHandlers extends TelegramLongPollingBot {
                 break;
             case "- Renault":
                 try {
+                    image.setPhoto("AgADBAADz7IxG8JXLgABoyd_hcoDlVfUciQZAARLkBBykRwpygRkAAIC");
                     sendMessage(Escuderias.getmessageEscuderia("6", message));
                     sendPhoto(Escuderias.getphoto("6", message));
                 } catch (TelegramApiException e) {
@@ -973,6 +1017,7 @@ public class EchoHandlers extends TelegramLongPollingBot {
                 break;
             case "- Toro Rosso":
                 try {
+                    image.setPhoto("AgADBAAD0LIxG8JXLgABykTQEkqHF2kGAR0ZAASh1FUd8WieI4F1AAIC");
                     sendMessage(Escuderias.getmessageEscuderia("7", message));
                     sendPhoto(Escuderias.getphoto("7", message));
                 } catch (TelegramApiException e) {
@@ -981,6 +1026,7 @@ public class EchoHandlers extends TelegramLongPollingBot {
                 break;
             case "- Sauber":
                 try {
+                    image.setPhoto("AgADBAAD0bIxG8JXLgAB85FQ1L9C2woe6hwZAAQGNwABk_A3vylqxQEAAQI");
                     sendMessage(Escuderias.getmessageEscuderia("8", message));
                     sendPhoto(Escuderias.getphoto("8", message));
                 } catch (TelegramApiException e) {
@@ -989,6 +1035,7 @@ public class EchoHandlers extends TelegramLongPollingBot {
                 break;
             case "- Mclaren":
                 try {
+                    image.setPhoto("AgADBAAD07IxG8JXLgABUOG5rcFv5dH6fCQZAATnA-6l9TA0CDhkAAIC");
                     sendMessage(Escuderias.getmessageEscuderia("9", message));
                     sendPhoto(Escuderias.getphoto("9", message));
                 } catch (TelegramApiException e) {
@@ -997,6 +1044,7 @@ public class EchoHandlers extends TelegramLongPollingBot {
                 break;
             case "- Manor":
                 try {
+                    image.setPhoto("AgADBAAD1LIxG8JXLgABNNISKzQAAffIshobGQAEWjrLcp537hwzeAACAg");
                     sendMessage(Escuderias.getmessageEscuderia("10", message));
                     sendPhoto(Escuderias.getphoto("10", message));
                 } catch (TelegramApiException e) {
@@ -1005,6 +1053,7 @@ public class EchoHandlers extends TelegramLongPollingBot {
                 break;
             case "- Haas":
                 try {
+                    image.setPhoto("AgADBAAD1bIxG8JXLgABdNIqc06I2aGghxsZAAQL0eyjRyeLeqPHAQABAg");
                     sendMessage(Escuderias.getmessageEscuderia("11", message));
                     sendPhoto(Escuderias.getphoto("11", message));
                 } catch (TelegramApiException e) {

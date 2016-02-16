@@ -37,6 +37,7 @@ public class Escuderias {
         image.setNewPhoto("C:\\Users\\David\\Desktop\\escuderias\\"+name+".jpg",name+".jpg");
         image.setChatId(mes.getChatId() + "");
 
+
         return image;
     }
 
@@ -78,7 +79,7 @@ public class Escuderias {
                 "Sede: "+escuderia[14]+"\n"+
                 "Debut: "+escuderia[15]+"\n"+
                 "Numero de Poles: "+escuderia[3]+"\n"+
-                "Numero de Vuletas Rapidas: "+escuderia[4]+"\n"+
+                "Numero de Vueltas Rapidas: "+escuderia[4]+"\n"+
                 "Numero de Victorias: "+escuderia[2]+"\n"+
                 "Numero de Puntos Total: "+escuderia[5]+"\n"+
                 "Titulos: "+escuderia[6]+"\n"+
